@@ -17,6 +17,11 @@ async def user_join(sid, user):
         return
     print(f"User {sid} => {user['emoji']} {user['name']} joined")
     users[sid] = {**user, 'sid': sid}
-    print(list(users.items()))
     # Broadcast to all connected clients
     await sio.emit('contacts', list(users.items()))
+
+
+@sio.event
+async def chat(sid, data):
+    to = data['to']
+    await sio.emit('chat', data, room=to)
