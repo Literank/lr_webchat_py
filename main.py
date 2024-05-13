@@ -25,3 +25,13 @@ async def user_join(sid, user):
 async def chat(sid, data):
     to = data['to']
     await sio.emit('chat', data, room=to)
+
+
+@sio.on('create-group')
+# Create Room
+async def create_group(sid, data):
+    socketIds, roomName, roomId = data['sids'], data['name'], data['id']
+    for socketId in socketIds:
+        await sio.enter_room(socketId, roomId)
+    await sio.emit('create-group', data, room=roomId)
+    print(f"Room {roomId} => {roomName} created")
