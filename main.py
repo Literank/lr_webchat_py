@@ -27,6 +27,12 @@ async def chat(sid, data):
     await sio.emit('chat', data, room=to)
 
 
+@sio.on('group-chat')
+async def group_chat(sid, data):
+    roomId = data['room']
+    await sio.emit('group-chat', data, room=roomId, skip_sid=sid)
+
+
 @sio.on('create-group')
 # Create Room
 async def create_group(sid, data):
